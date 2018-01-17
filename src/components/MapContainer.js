@@ -22,6 +22,7 @@ export class MapContainer extends Component {
     this.itemClicked = this.itemClicked.bind(this);
     this.openInfoWindow = this.openInfoWindow.bind(this);
     this.findMarker = this.findMarker.bind(this);
+    this.onMapError = this.onMapError.bind(this);
   }
 
   findPlaceDescription = function (name) {
@@ -104,6 +105,10 @@ export class MapContainer extends Component {
     this.setState({places: updatePlaces});
   };
 
+  onMapError = function () {
+    alert('Error happened while fetching Google Maps API');
+  };
+
   render() {
     const style = {
       width: '100%',
@@ -117,13 +122,15 @@ export class MapContainer extends Component {
                     updateListCallback={this.updatePlaces}
                     itemClicked={this.itemClicked}/>
         <Map google={this.props.google}
+             ref={(c) => this['map'] = c }
              style={style}
              initialCenter={{
                lat: -22.846645,
                lng: -47.063862
              }}
              zoom={12}
-             onClick={this.onMapClicked}>
+             onClick={this.onMapClicked}
+             onError={this.onMapError}>
           {
             this.state.places.map(function (place, index) {
               return <Marker
@@ -160,9 +167,3 @@ export class MapContainer extends Component {
 export default GoogleApiWrapper({
   apiKey: 'AIzaSyCJDO-vf6VUdfzh5FiYf9JgA67ECEC8L9w'
 })(MapContainer)
-
-// https://www.npmjs.com/package/react-burger-menu
-//   https://www.latlong.net/
-//     https://reactjs.org/docs/higher-order-components.html
-//       https://www.fullstackreact.com/articles/how-to-write-a-google-maps-react-component/#
-//         https://www.fullstackreact.com/30-days-of-react/
