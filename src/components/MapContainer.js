@@ -16,6 +16,14 @@ export class MapContainer extends Component {
       places: props.places
     };
 
+    let _consoleError = console.error;
+    console.error = function(msg){
+      if(msg.indexOf('Google Maps API error') !== -1){
+        this.onMapError();
+      }
+      _consoleError.apply(console, arguments);
+    }.bind(this);
+
     this.onMapClicked = this.onMapClicked.bind(this);
     this.findPlaceDescription = this.findPlaceDescription.bind(this);
     this.updatePlaces = this.updatePlaces.bind(this);
